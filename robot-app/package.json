@@ -1,0 +1,35 @@
+{
+  "name": "com.ros.controller",
+  "displayName": "robot-app",
+  "version": "1.0.0",
+  "description": "Robot App is an Application for ROS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "George Alexakis",
+  "license": "MIT",
+  "devDependencies": {
+    "cordova-android": "^9.1.0",
+    "cordova-browser": "^6.0.0",
+    "cordova-plugin-app-exit": "^0.0.2",
+    "cordova-plugin-insomnia": "github:eddyverbruggen/insomnia-phonegap-plugin",
+    "cordova-plugin-vibration": "^3.1.1",
+    "cordova-plugin-whitelist": "^1.3.4"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-insomnia": {},
+      "cordova-plugin-app-exit": {},
+      "cordova-plugin-vibration": {}
+    },
+    "platforms": [
+      "android",
+      "browser"
+    ]
+  }
+}

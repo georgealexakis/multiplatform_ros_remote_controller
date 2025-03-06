@@ -1,0 +1,455 @@
+/* General styles and fonts */
+:root {
+    --main: #673AB7;
+    --back-main: #212121;
+    --back-tile: #323232;
+    --back-tile-r: #383838;
+    --gray: #555555;
+    --white: white;
+}
+@font-face {
+    font-family: 'Montserrat';
+    src: url('assets/fonts/Montserrat-Light.ttf') format('truetype');
+}
+html, body, .container-fluid {
+    font-family: 'Montserrat', sans-serif;
+    height: 100%;
+    background-color: var(--back-main);
+    min-height: 650px;
+    min-width: 1100px;
+}
+textarea {
+    border-radius: 0 !important;
+    background-color: var(--back-tile) !important;
+    border-color: var(--main) !important;
+    color: var(--white) !important;
+    font-size: 0.7rem !important;
+    font-weight: 200 !important;
+    resize: none;
+}
+span {
+    color: var(--main);
+}
+hr {
+    color: var(--main);
+}
+ul {
+    margin: 0rem !important;
+}
+.top-status {
+    margin-bottom: 0rem !important;
+}
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 0.5rem;
+}
+::-webkit-scrollbar-track {
+    background: var(--white);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--main);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray);
+}
+/* Styles for main containers */
+.status {
+    height: 8%;
+}
+.main {
+    height: 70%;
+}
+.settings {
+    height: 22%;
+    line-height: 1.45;
+}
+/* Sub container of main container */
+.main-sub {
+    height: 50%;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+}
+/* Column styles */
+.col, .col-6, .col-4 {
+    margin: 0.1rem !important;
+    background-color: var(--back-tile);
+    color: var(--white);
+    overflow: hidden !important;
+    border-radius: 3px;
+}
+.col-div {
+    margin: 0rem !important;
+    background-color: transparent;
+    height: 100%;
+}
+.col-title {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.col-settings {
+    padding: 0rem;
+}
+/* Live feed modifications */
+.img-container {
+    padding: 0rem !important;
+    text-align: center;
+    height: auto;
+    /* OSM */
+    position: relative;
+}
+#live {
+    display: flex;
+}
+#live canvas {
+    border-radius: 3px;
+}
+#liveFeed {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+}
+/* Joystic for navigation */
+#joy {
+    position: relative !important;
+    left: 50%;
+    top: 50%;
+}
+#navMethod {
+    color: var(--white);
+}
+/* Buttons style */
+.btn-outline-secondary {
+    border-color: var(--main);
+    color: var(--main) !important;
+}
+.btn-outline-secondary:hover {
+    border-color: var(--main);
+    background-color: var(--main);
+    color: var(--white) !important;
+}
+.btn-settings {
+    width: 100%;
+    height: auto;
+}
+.btn-settings .btn {
+    border-radius: 0rem !important;
+    border: 0rem;
+    color: var(--white);
+    padding: 0.47rem;
+}
+.btn-settings .btn:hover {
+    background-color: var(--main);
+}
+/* Progress bar style */
+.progress-label {
+    height: 0.45rem;
+    border-radius: 0;
+}
+.progress-bar {
+    background-color: var(--main);
+}
+.progress {
+    margin-top: 0.6rem;
+    font-size: .475rem;
+}
+/* Media streamer */
+.streamer {
+    background-color: transparent;
+    border: none;
+    color: var(--white);
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV/TikUqCnZQcchQnSyIijhKFYtgobQVWnUwufQLmjQkKS6OgmvBwY/FqoOLs64OroIg+AHi5uak6CIl/i8ptIjx4Lgf7+497t4BQqPCVDMwAaiaZaTiMTGbWxW7XxFAEP0YQkBipp5IL2bgOb7u4ePrXZRneZ/7c/QqeZMBPpF4jumGRbxBPLNp6Zz3icOsJCnE58TjBl2Q+JHrsstvnIsOCzwzbGRS88RhYrHYwXIHs5KhEk8TRxRVo3wh67LCeYuzWqmx1j35C0N5bSXNdZojiGMJCSQhQkYNZVRgIUqrRoqJFO3HPPzDjj9JLplcZTByLKAKFZLjB/+D392ahalJNykUA7pebPtjFOjeBZp12/4+tu3mCeB/Bq60tr/aAGY/Sa+3tcgR0LcNXFy3NXkPuNwBBp90yZAcyU9TKBSA9zP6phwwcAv0rLm9tfZx+gBkqKvlG+DgEBgrUva6x7uDnb39e6bV3w8bTnKEinkmAAAAAAZiS0dEAP8AAAAAMyd88wAAAAlwSFlzAAAN1wAADdcBQiibeAAAAAd0SU1FB+UECBAbBAgUAk0AAABGSURBVDjLY2AYBYwwxv////+TpJGRkZGBgYGBiVIXMFHNC6R4A+Z8DAOIMQRZM1YD8BmCrhmnAdgMwaaZIPgPBaOpHT8AAGquHAKpGLhpAAAAAElFTkSuQmCC');
+}
+.streamer option{
+    background-color: var(--back-tile);
+    color: var(--white);
+}
+/* Chart style */
+#stChart {
+    height: 100% !important;
+}
+.col-statistics {
+    padding: 0rem;
+}
+/* 3D model style */
+#urdf {
+    border-radius: 3px !important;
+}
+.urdf-container {
+    padding: 0rem !important;
+    position: relative;
+}
+#urdfFullscreen {
+    position: absolute;
+    right: 0;
+    color: var(--main);
+    border: none;
+    z-index: 1000;
+}
+#urdfFullscreen:hover {
+    color: var(--white);
+    background-color: transparent;
+}
+#urdfModal {
+    overflow: hidden;
+}
+#urdfExit {
+    position: absolute;
+    right: 0;
+    color: var(--main);
+    border: none;
+}
+#urdfExit:hover {
+    color: var(--white);
+    background-color: transparent;
+}
+/* Connection modal style */
+.modal-content {
+    background-color: var(--back-tile) !important;
+    color: var(--white);
+}
+.connection-modal .mb-3 {
+    margin-bottom: 0.2rem !important;
+}
+.connection-footer, .connection-header {
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+}
+/* Settings in modal */
+.modal-footer {
+    justify-content: flex-start;
+}
+/* Speed and angles tile */
+.col-info-1 {
+    background-color: var(--back-tile);
+    margin: 0rem !important;
+    border-radius: 0rem;
+    font-size: 0.85rem;
+}
+.col-info-2 {
+    background-color: var(--back-tile-r);
+    margin: 0rem !important;
+    border-radius: 0rem;
+    font-size: 0.85rem;
+}
+@media screen and (min-width: 1550px) {
+    .col-info-1 small, .col-info-2 small {
+        font-size: 1rem;
+    }
+}
+.value {
+    color: var(--main);
+    font-weight: 800;
+}
+.speed-row {
+    height: 40%;
+    font-size: 0.95rem;
+}
+.angles-row {
+    height: 25%;
+    font-size: 0.95rem;
+}
+/* Range slider */
+.form-range::-webkit-slider-thumb {
+    background: var(--main);
+}  
+.form-range::-moz-range-thumb {
+    background: var(--main);
+}
+.form-range::-ms-thumb {
+    background: var(--main);
+}
+.slider-label {
+    float: left;
+    font-size: 0.85rem;
+}
+@media screen and (min-width: 1550px) {
+    .slider-label {
+        font-size: 1rem;
+    }
+}
+.col-lg-9 {
+    padding: 0rem !important;
+    padding-top: 0.5rem !important;
+}
+.col-lg-3 {
+    padding-top: 0.5rem !important;
+}
+/* Logs */
+#logs{
+    height: 80%; 
+    box-sizing: border-box;
+}
+/* Goals tile */
+.goals {
+    text-align: center;
+    padding: 0.5rem !important;
+    margin-top: 0.7rem !important;
+}
+.goals button {
+    font-size: 0.7rem !important;
+}
+@media screen and (min-width: 1550px) {
+    .goals button {
+        font-size: 1rem !important;
+    }
+}
+/* Switches style */
+.form-check-input:checked {
+    background-color: var(--main) !important;
+    border-color: var(--main) !important;
+}
+.form-check-label {
+    font-size: 0.8rem !important;
+    float: left !important;
+}
+/* Loading spinner */
+#spinnerIcon {
+    color: var(--white);
+    display: none;
+}
+#connectText {
+    color: var(--white);
+}
+#connectTopicsText {
+    color: var(--white);
+}
+/* Footer buttons */
+.modal-footer .btn-secondary {
+    background-color: var(--main);
+    border-color: var(--back-tile);
+}
+.modal-footer .btn-dark {
+    background-color: var(--main);
+    border-color: var(--back-tile);
+    border-width: 0.2rem;
+    min-width: 11rem !important;
+    max-width: 12.5rem !important;
+}
+.modal-footer .btn-dark:hover {
+    background-color: var(--back-tile);
+    border-color: var(--main);
+}
+/* Main block */
+#mainBlock {
+    display: none;
+}
+/* Gamepad */
+.gamepad-table {
+    color: var(--white) !important;
+}
+.gamepad-table th, .gamepad-table td {
+    padding: 0rem !important;
+}
+.gamepad-progress {
+    font-size: 1rem;
+    margin: 0.4rem;
+}
+.gamepad-list {
+    color: var(--white);
+    border-color: transparent;
+    background-color: var(--back-tile);
+}
+/* Stats labels */
+.stats-label {
+    font-size: 0.6rem;
+}
+@media screen and (min-width: 1550px) {
+    .stats-label {
+        font-size: 1rem;
+    }
+}
+/* Cancel goals button */
+#g4 {
+    border-color: var(--main);
+    background-color: var(--main);
+}
+#g4:hover {
+    background-color: transparent;
+    border-color: #dc3545;
+    color: #dc3545;
+}
+/* Navigation buttons */
+#navigationExit {
+    position: absolute;
+    right: 0;
+    color: var(--main);
+    border: none;
+}
+#navigationExit:hover {
+    color: var(--white);
+    background-color: transparent;
+}
+#navigationButtons {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: var(--main);
+    border: none;
+}
+#navigationButtons button{
+    color: var(--main);
+    border: none;
+}
+#navigationButtons button:hover {
+    color: var(--white);
+    background-color: transparent;
+}
+#navigationMapFeed canvas {
+    border-radius: 0.3rem;
+}
+#goalsInfoModal table {
+    color: white !important;
+}
+/* OSM */
+#map-c {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 10px 2px 2px 2px;
+    width: 50%;
+    height: 40%;
+    opacity: 0.5;
+}
+#map {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 2px 2px 2px;
+}
+.leaflet-control-attribution {
+    display: none !important;
+}
+.map-btns {
+    position: absolute;
+    z-index: 401;
+    border: none;
+    bottom: 0;
+    right: 0;
+}
+.map-btn {
+    color: var(--main);
+    border: none;
+}
+.map-btn:hover {
+    color: var(--main);
+    background-color: transparent;
+}
+#fullMap {
+    position: absolute;
+    z-index: 401;
+    border: none;
+    top: 0;
+    left: 0;
+}
+#pointsInfoModal table {
+    color: white !important;
+}
+.distance-label {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 401;
+    border: none;
+    color: var(--main);
+}

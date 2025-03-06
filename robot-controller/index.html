@@ -1,0 +1,1312 @@
+<!doctype html>
+<html lang="en">
+
+<!-- Head tag includes stylesheets and meta information -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="loader.css">
+    <title>Robot Controller</title>
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
+</head>
+
+<body>
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="loader"></div>
+    </div>
+    <!-- Main dashboard container -->
+    <div class="container-fluid" id="mainBlock">
+        <!-- Status bar - Top bar -->
+        <div class="row status">
+            <div class="col d-flex justify-content-around align-items-center">
+                <!-- Essential operation stats - Add more block if needed -->
+                <div class="p-2">
+                    <h5 class="top-status">Robot Status: <span id="status">waiting</span></h5>
+                </div>
+                <div class="p-2">
+                    <h5 class="top-status">Operation Time: <span id="hours">00</span><span>:</span><span
+                            id="minutes">00</span><span>:</span><span id="seconds">00</span>
+                    </h5>
+                </div>
+                <div class="p-2">
+                    <h5 class="top-status">Connection Status: <span id="connection">waiting</span></h5>
+                </div>
+                <div class="p-2">
+                    <h5 class="top-status">Robot Battery: <span id="battery">0%</span></h5>
+                </div>
+            </div>
+        </div>
+        <!-- Center container -->
+        <div class="row main">
+            <!-- Cameras live feed tile -->
+            <div class="col-6 img-container" id="liveParent">
+                <div id="live"></div>
+                <div id="liveFeed">
+                    <h3>Live Feed Unavailable</h3>
+                </div>
+                <!-- OSM -->
+                <div id="map-c">
+                    <div id="map"></div>
+                    <div class="distance-label">
+                        <b><small id=distanceText>0.0 meters</small></b>
+                    </div>
+                    <button type="button" class="btn btn-outline-dark map-btn" id="fullMap">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-fullscreen" viewBox="0 0 16 16">
+                            <path
+                                d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z" />
+                        </svg>
+                    </button>
+                    <div class="btn-group map-btns">
+                        <button type="button" class="btn btn-outline-dark map-btn" id="focusMap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                            </svg>
+                        </button>
+                        <button type="button" class="btn btn-outline-dark map-btn" id="zoomMap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
+                            </svg>
+                        </button>
+                        <button type="button" class="btn btn-outline-dark map-btn" id="unzoomMap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z" />
+                            </svg>
+                        </button>
+                        <button type="button" class="btn btn-outline-dark map-btn" id="osmPoints">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+                            </svg>
+                        </button>
+                        <button type="button" class="btn btn-outline-dark map-btn" id="startOSMnav">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-play-circle-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
+                            </svg>
+                        </button>
+                        <button type="button" class="btn btn-outline-dark map-btn" id="clearOSMpins">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                            </svg>
+                        </button>
+                        <button type="button" class="btn btn-outline-dark map-btn" id="savePoint">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-archive-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Panels for general data visualization -->
+            <div class="col col-div">
+                <div class="row main-sub" id="urdfParent">
+                    <div class="col urdf-container">
+                        <!-- Fullscreen mode button -->
+                        <button type="button" class="btn" id="urdfFullscreen">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-fullscreen" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z" />
+                            </svg>
+                        </button>
+                        <!-- URDF model tile -->
+                        <div id="urdf"></div>
+                    </div>
+                </div>
+                <div class="row main-sub">
+                    <div class="col text-center">
+                        <div class="row speed-row">
+                            <div class="col col-info-2">
+                                <small>Linear V. Booster</small>
+                                <br>
+                                <small class="value" id="maxLinear">1</small>
+                            </div>
+                            <div class="col col-info-1">
+                                <small>Angular V. Booster</small>
+                                <br>
+                                <small class="value" id="maxAngular">1</small>
+                            </div>
+                            <div class="col col-info-2">
+                                <small>Linear Velocity (m/s)</small>
+                                <small class="value" id="linear">0.000</small>
+                            </div>
+                            <div class="col col-info-1">
+                                <small>Angular Velocity (rad/s)</small>
+                                <small class="value" id="angular">0.000</small>
+                            </div>
+                        </div>
+                        <div class="row angles-row">
+                            <div class="col col-info-1">
+                                <small>Angle X</small>
+                                <small class="value" id="a0">0.000</small>
+                            </div>
+                            <div class="col col-info-2">
+                                <small>Angle Y</small>
+                                <small class="value" id="a1">0.000</small>
+                            </div>
+                            <div class="col col-info-1">
+                                <small>Angle Z</small>
+                                <small class="value" id="a2">0.000</small>
+                            </div>
+                            <div class="col col-info-2">
+                                <small>Angle W</small>
+                                <small class="value" id="a3">0.000</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3"><small class="slider-label">Linear:</small></div>
+                            <div class="col-lg-9">
+                                <input type="range" class="form-range" min="-4" max="4" value="0" id="linearSpeed">
+                            </div>
+                            <div class="col-lg-3"><small class="slider-label">Angular:</small></div>
+                            <div class="col-lg-9">
+                                <input type="range" class="form-range" min="-4" max="4" value="0" id="angularSpeed">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-div">
+                <div class="row main-sub">
+                    <div class="col">
+                        <!-- Navigation goals -->
+                        <div class="col-title">SLAM:</div>
+                        <div class="goals">
+                            <div class="btn-group d-flex align-items-center" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="g0">
+                                    Map
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="g1">
+                                    Goals
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="g2">
+                                    Model
+                                </button>
+                            </div>
+                            <hr>
+                            <div class="btn-group d-flex align-items-center" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="g3">
+                                    Save
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" id="g4">
+                                    Cancel
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="g5">
+                                    Clear
+                                </button>
+                            </div>
+                            <hr>
+                            <div class="btn-group d-flex align-items-center" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="g6">
+                                    Pose E.
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="g7">
+                                    Multiple G.
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="g8">
+                                    Single G.
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row main-sub">
+                    <div class="col">
+                        <div class="col-title">Switches:</div>
+                        <div class="d-flex justify-content-around">
+                            <div class="p-2">
+                                <div class="d-flex flex-column bd-highlight mb-3">
+                                    <div class="p-2 bd-highlight">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="s0">
+                                            <label class="form-check-label" for="s0">
+                                                Action 1
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="s1">
+                                            <label class="form-check-label" for="s1">
+                                                Action 2
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="s2">
+                                            <label class="form-check-label" for="s2">
+                                                Action 3
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="s3">
+                                            <label class="form-check-label" for="s3">
+                                                Action 4
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="d-flex flex-column bd-highlight mb-3">
+                                    <div class="p-2 bd-highlight">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="s4">
+                                            <label class="form-check-label" for="s4">
+                                                <span id="navMethod">Joystick</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="s5">
+                                            <label class="form-check-label" for="s5">
+                                                Cameras
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="s6">
+                                            <label class="form-check-label" for="s6">
+                                                GPS Map
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="s7">
+                                            <label class="form-check-label" for="s7">
+                                                F. Velocity
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bottom toolbar with chart, bars, and general purpose buttons -->
+        <div class="row settings">
+            <div class="col col-statistics">
+                <canvas id="stChart"></canvas>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col-3">
+                        <small class="stats-label">CPU °C:</small>
+                    </div>
+                    <div class="col-9">
+                        <div class="progress progress-label">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" id="p0">0%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small class="stats-label">GPU °C:</small>
+                    </div>
+                    <div class="col-9">
+                        <div class="progress progress-label">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" id="p1">0%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small class="stats-label">Volt:</small>
+                    </div>
+                    <div class="col-9">
+                        <div class="progress progress-label">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" id="p2">0%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small class="stats-label">Ampere:</small>
+                    </div>
+                    <div class="col-9">
+                        <div class="progress progress-label">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" id="p3">0%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small class="stats-label">Lidar:</small>
+                    </div>
+                    <div class="col-9">
+                        <div class="progress progress-label">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" id="p4">0%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <small class="stats-label">Progress:</small>
+                    </div>
+                    <div class="col-9">
+                        <div class="progress progress-label">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" id="p5">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Navigation joystick tile -->
+            <div class="col">
+                Navigation:
+                <div id="joy"></div>
+            </div>
+            <!-- Logs tile -->
+            <div class="col">
+                Logs:
+                <textarea id="logs" class="form-control" rows="6" readonly></textarea>
+            </div>
+            <!-- Settings buttons tile -->
+            <div class="col col-settings">
+                <div class="col-title">Settings:</div>
+                <div class="btn-group btn-settings" role="group">
+                    <button type="button" class="btn btn-outline-dark" id="b0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-joystick" viewBox="0 0 16 16">
+                            <path
+                                d="M10 2a2 2 0 0 1-1.5 1.937v5.087c.863.083 1.5.377 1.5.726 0 .414-.895.75-2 .75s-2-.336-2-.75c0-.35.637-.643 1.5-.726V3.937A2 2 0 1 1 10 2z" />
+                            <path
+                                d="M0 9.665v1.717a1 1 0 0 0 .553.894l6.553 3.277a2 2 0 0 0 1.788 0l6.553-3.277a1 1 0 0 0 .553-.894V9.665c0-.1-.06-.19-.152-.23L9.5 6.715v.993l5.227 2.178a.125.125 0 0 1 .001.23l-5.94 2.546a2 2 0 0 1-1.576 0l-5.94-2.546a.125.125 0 0 1 .001-.23L6.5 7.708l-.013-.988L.152 9.435a.25.25 0 0 0-.152.23z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" id="b1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-trash" viewBox="0 0 16 16">
+                            <path
+                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                            <path fill-rule="evenodd"
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" id="b2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-keyboard" viewBox="0 0 16 16">
+                            <path
+                                d="M14 5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h12zM2 4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H2z" />
+                            <path
+                                d="M13 10.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm0-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm-5 0A.25.25 0 0 1 8.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 8 8.75v-.5zm2 0a.25.25 0 0 1 .25-.25h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5a.25.25 0 0 1-.25-.25v-.5zm1 2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm-5-2A.25.25 0 0 1 6.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 6 8.75v-.5zm-2 0A.25.25 0 0 1 4.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 4 8.75v-.5zm-2 0A.25.25 0 0 1 2.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 2 8.75v-.5zm11-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm-2 0a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm-2 0A.25.25 0 0 1 9.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 9 6.75v-.5zm-2 0A.25.25 0 0 1 7.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 7 6.75v-.5zm-2 0A.25.25 0 0 1 5.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 5 6.75v-.5zm-3 0A.25.25 0 0 1 2.25 6h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5A.25.25 0 0 1 2 6.75v-.5zm0 4a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm2 0a.25.25 0 0 1 .25-.25h5.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-5.5a.25.25 0 0 1-.25-.25v-.5z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="btn-group btn-settings" role="group">
+                    <button type="button" class="btn btn-outline-dark" id="b3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-gear-wide-connected" viewBox="0 0 16 16">
+                            <path
+                                d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434l.071-.286zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5zm0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78h4.723zM5.048 3.967c-.03.021-.058.043-.087.065l.087-.065zm-.431.355A4.984 4.984 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8 4.617 4.322zm.344 7.646l.087.065-.087-.065z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" id="b4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-bootstrap-reboot" viewBox="0 0 16 16">
+                            <path
+                                d="M1.161 8a6.84 6.84 0 1 0 6.842-6.84.58.58 0 0 1 0-1.16 8 8 0 1 1-6.556 3.412l-.663-.577a.58.58 0 0 1 .227-.997l2.52-.69a.58.58 0 0 1 .728.633l-.332 2.592a.58.58 0 0 1-.956.364l-.643-.56A6.812 6.812 0 0 0 1.16 8z" />
+                            <path
+                                d="M6.641 11.671V8.843h1.57l1.498 2.828h1.314L9.377 8.665c.897-.3 1.427-1.106 1.427-2.1 0-1.37-.943-2.246-2.456-2.246H5.5v7.352h1.141zm0-3.75V5.277h1.57c.881 0 1.416.499 1.416 1.32 0 .84-.504 1.324-1.386 1.324h-1.6z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" id="b5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-sliders" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="btn-group btn-settings" role="group">
+                    <button type="button" class="btn btn-outline-dark" id="b6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-fullscreen" viewBox="0 0 16 16">
+                            <path
+                                d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" id="b7">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-archive" viewBox="0 0 16 16">
+                            <path
+                                d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" id="b8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-x-square" viewBox="0 0 16 16">
+                            <path
+                                d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal structure for settings ROS topics and more -->
+    <div class="modal fade" id="connectModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen" role="document">
+            <div class="modal-content">
+                <div class="modal-header connection-header">
+                    <h5 class="modal-title">Robot Settings</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <form class="connection-modal">
+                                <!-- Robot Config -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="robotIP" class="col-form-label">Robot:</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="input-group">
+                                            <select class="form-select form-select-sm" id="robotConfigSelection">
+                                                <option selected>Select robot configuration</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-1 downloadConfig-col">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                            id="downloadConfig">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                                                <path
+                                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Robot IP -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="robotIP" class="col-form-label">Robot IP:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-sm" id="robotIP"
+                                                value="localhost" placeholder="localhost or any IP">
+                                            <input type="text" class="form-control form-control-sm" id="robotPort"
+                                                value="9090" placeholder="Port">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Robot stream IP -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="streamIP" class="col-form-label">Stream IP:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-sm" id="streamIP"
+                                                value="localhost" placeholder="localhost or any IP">
+                                            <input type="text" class="form-control form-control-sm" id="streamPort"
+                                                value="8080" placeholder="Port">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col col-offset-3 text-center">
+                                    <div class="btn-group btn-group-sm w-100" role="group">
+                                        <button type="button" class="btn btn-outline-secondary" id="sl0">Select
+                                            All</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="sl1">1</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="sl2">2</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="sl3">3</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="sl4">4</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="sl5">5</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="sl6">Unselect
+                                            All</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Live feed - Camera 1 -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t0" class="col-form-label">Camera No.1:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct0" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t0"
+                                                value="/usb_cam/image_raw" placeholder="Type: sensor_msgs/Image">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Live feed - Camera 2 -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t1" class="col-form-label">Camera No.2:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct1" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t1"
+                                                value="/usb_cam/image_raw_2" placeholder="Type: sensor_msgs/Image">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Diagnostics -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t2" class="col-form-label">Diagnostics:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct2" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t2"
+                                                value="/controller/diagnostics" placeholder="Type: std_msgs/String">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Statistics -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t3" class="col-form-label">Statistics:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct3" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t3"
+                                                value="/controller/statistics" placeholder="Type: std_msgs/String">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Robot 3D model frame -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t4" class="col-form-label">Frame:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct4" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t4"
+                                                value="/base_link" placeholder="Fixed frame for 3d model">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- CPU usage -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t5" class="col-form-label">CPU Usage:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct5" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t5"
+                                                value="/cpu_percent" placeholder="Type: std_msgs/UInt64MultiArray">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Memory usage -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t6" class="col-form-label">Memory Usage:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct6" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t6"
+                                                value="/memory_percent" placeholder="Type: std_msgs/UInt64">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Battery usage -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t7" class="col-form-label">Battery Usage:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct7" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t7"
+                                                value="/battery" placeholder="Type: std_msgs/UInt64">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Navigation -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t8" class="col-form-label">Navigation:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct8" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t8"
+                                                value="/cmd_vel" placeholder="Type: geometry_msgs/Twist">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Goals -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t9" class="col-form-label">Goals:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct9" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t9"
+                                                value="/move_base_simple/goal"
+                                                placeholder="Type: geometry_msgs/PoseStamped">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Cancel goals -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t10" class="col-form-label">Cancel Goals:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct10" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t10"
+                                                value="/move_base/cancel" placeholder="Type: actionlib_msgs">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Actions -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t11" class="col-form-label">Actions:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct11" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t11"
+                                                value="/actions" placeholder="Type: std_msgs/UInt64MultiArray">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Ranges -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t12" class="col-form-label">Ranges:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct12" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t12"
+                                                value="/ranges" placeholder="Type: std_msgs/Float64MultiArray">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Movements -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t13" class="col-form-label">Movements:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct13" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t13"
+                                                value="/movements" placeholder="Type: geometry_msgs/Twist">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Point Cloud 2 frame -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t14" class="col-form-label">P.C.2 Frame:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct14" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t14"
+                                                value="/map" placeholder="Point cloud 2 frame">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Point Cloud 2 topic -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t15" class="col-form-label">P.C.2 Topic:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct15" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t15"
+                                                value="/octomap_point_cloud_centers"
+                                                placeholder="Type: sensor_msgs/PointCloud">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Temperatures topic -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t16" class="col-form-label">Temperatures:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct16" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t16"
+                                                value="/temperatures" placeholder="Type: std_msgs/UInt64MultiArray">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- GPS topic -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t17" class="col-form-label">GPS:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct17" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t17"
+                                                value="/piksi/navsatfix_best_fix"
+                                                placeholder="Type: sensor_msgs/NavSatFix">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Map server name -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t18" class="col-form-label">Map Server:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct18" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t18"
+                                                value="/move_base" placeholder="Server name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- GPS points topic -->
+                                <div class="row mb-3">
+                                    <div class="col-3">
+                                        <label for="t19" class="col-form-label">GPS Points:</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input class="form-check-input" type="checkbox" id="ct19" checked>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="t19"
+                                                value="/gps/points" placeholder="Type: std_msgs/String">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <!-- Logs textarea -->
+                            <div class="mb-3">
+                                <textarea class="form-control" rows="57" id="mainLogs" readonly></textarea>
+                            </div>
+                            <div class="row justify-content-around">
+                                <button type="button" class="btn btn-sm btn-outline-secondary col-5" id="logsOn">Logs
+                                    ON</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary col-5" id="logsOff">Logs
+                                    OFF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal buttons -->
+                <div class="modal-footer connection-footer">
+                    <div class="btn-group col justify-content-center" role="group">
+                        <button type="button" class="btn btn-sm btn-dark" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-sm btn-dark" id="f0">
+                            <span id="spinnerIcon" class="spinner-border spinner-border-sm" role="status"></span>
+                            <span id="connectText">Connect</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-dark" id="f1" disabled>
+                            <span id="connectTopicsText">Connect Topics</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-dark" id="f2" disabled>
+                            Get Topics
+                        </button>
+                        <button type="button" class="btn btn-sm btn-dark" id="f3">
+                            Clear
+                        </button>
+                        <button type="button" class="btn btn-sm btn-dark" id="f4">
+                            Restore
+                        </button>
+                        <button type="button" class="btn btn-sm btn-dark" id="f5">
+                            Help
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Gamepad controller settings -->
+    <div class="modal fade" id="gamepadModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">External Controller Settings</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="text-danger" id="start"><b>No external controller is connected. Make sure that the
+                            connection is established.</b></p>
+                    <div id="gamepadSettings"></div>
+                    <hr>
+                    <div class="table-responsive" id="gamepadSelection">
+                        <table class="table gamepad-table">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Increase Linear Speed:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad1"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Decrease Linear Speed:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad2"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Increase Angular Speed:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad3"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Decrease Angular Speed:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad4"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Action 1:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad5"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Action 2:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad6"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Action 3:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad7"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Action 4:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad8"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Linear Speed:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad9"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Angular Speed:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad10"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Movement 1:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad11"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Movement 2:</th>
+                                    <td>
+                                        <select class="form-select form-select-sm gamepad-list" id="gamepad12"></select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" id="savePrefs">Save</button>
+                    <button type="button" class="btn btn-sm btn-success" id="loadPrefs">Load</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="restoreDefaults">Restore</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Keyboard button settings -->
+    <div class="modal fade" id="keyboardSettingsModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Keyboard Settings</h5>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="manualControl" id="defaultControl"
+                                checked>
+                            <label class="form-check-label" for="defaultControl">
+                                Control keys (W, A, S, D)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="manualControl" id="arrowsControl">
+                            <label class="form-check-label" for="arrowsControl">
+                                Control keys (Arrows)
+                            </label>
+                        </div>
+                        <small>Pressed Key: <span id="keyConsole"></span></small>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Reset alert box -->
+    <div class="modal fade" id="resetModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Reset Controller</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="text-danger"><b>Warning: You are about to reset the controller.</b></p>
+                    <ul>
+                        <li>All unsaved settings will be lost.</li>
+                        <li>The connections will be reseted.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-danger" id="reset">Reset</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fullscreen URDF -->
+    <div class="modal fade" id="urdfModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <!-- URDF button -->
+                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="urdfExit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </button>
+                <!-- URDF model -->
+                <div id="urdfFull"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Ranges -->
+    <div class="modal fade" id="rangesModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ranges</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="range1" class="col-sm-2 col-form-label">Range.1:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control form-control-sm" id="range1"
+                                placeholder="Integer or float number" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="range2" class="col-sm-2 col-form-label">Range.2:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control form-control-sm" id="range2"
+                                placeholder="Integer or float number" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="range3" class="col-sm-2 col-form-label">Range.3:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control form-control-sm" id="range3"
+                                placeholder="Integer or float number" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="range4" class="col-sm-2 col-form-label">Range.4:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control form-control-sm" id="range4"
+                                placeholder="Integer or float number" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" id="rangesTrigger">Update</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fixed velocity -->
+    <div class="modal fade" id="fvelocityModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Fixed velocity for crucial tasks</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="range1" class="col-sm-4 col-form-label">Linear Max:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control form-control-sm" id="fv0"
+                                placeholder="Integer or float number" value="157">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="range2" class="col-sm-4 col-form-label">Linear Min:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control form-control-sm" id="fv1"
+                                placeholder="Integer or float number" value="97">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="range4" class="col-sm-4 col-form-label">Linear Neutral:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control form-control-sm" id="fv2"
+                                placeholder="Integer or float number" value="127">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="range3" class="col-sm-4 col-form-label">Angular Max:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control form-control-sm" id="fv3"
+                                placeholder="Integer or float number" value="157">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="range4" class="col-sm-4 col-form-label">Angular Min:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control form-control-sm" id="fv4"
+                                placeholder="Integer or float number" value="97">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="range4" class="col-sm-4 col-form-label">Angular Neutral:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control form-control-sm" id="fv5"
+                                placeholder="Integer or float number" value="127">
+                        </div>
+                    </div>
+                    <small class="text-danger"><b>*Works only with joystick</b></small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" id="fvelocitySet">Set</button>
+                    <button type="button" class="btn btn-sm btn-success" id="armWheels">Arm</button>
+                    <button type="button" class="btn btn-sm btn-warning" id="disarmWheels">Disarm</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation panel -->
+    <div class="modal fade" id="navigationtModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" id="navigationMapCanvasBody">
+                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="navigationExit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </button>
+                <!-- Navigation buttons -->
+                <div class="btn-group d-flex align-items-center" role="group" id="navigationButtons">
+                    <button type="button" class="btn btn-outline-dark" id="n0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-zoom-in" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+                            <path
+                                d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z" />
+                            <path fill-rule="evenodd"
+                                d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" id="n1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-zoom-out" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+                            <path
+                                d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z" />
+                            <path fill-rule="evenodd"
+                                d="M3 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" id="STARTBUTTON">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-cursor" viewBox="0 0 16 16">
+                            <path
+                                d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103zM2.25 8.184l3.897 1.67a.5.5 0 0 1 .262.263l1.67 3.897L12.743 3.52 2.25 8.184z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" id="CLEANBUTTON">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-x-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="navigationMapFeed"></div>
+                <canvas id="navigationMapPreview"></canvas>
+            </div>
+        </div>
+    </div>
+    <!-- Points info panel -->
+    <div class="modal fade" id="pointsInfoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5>GPS Points</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Coordinates</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pointsModalBody"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Goals panel -->
+    <div class="modal fade" id="goalsInfoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5>Goals</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Goal ID</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="goalsModalBody"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript libraries -->
+    <!-- Minified - 3D model -->
+    <script src="node_modules/three/build/three.min.js"></script>
+    <!-- Non minified - Toolbox -->
+    <script src="node_modules/three/examples/js/loaders/ColladaLoader.js"></script>
+    <script src="node_modules/three/examples/js/loaders/STLLoader.js"></script>
+    <script src="node_modules/eventemitter2/lib/eventemitter2.js"></script>
+    <!-- Minified - ROS, Navigation, Live stream -->
+    <script src="node_modules/roslib/build/roslib.min.js"></script>
+    <script src="assets/libraries/minified/mjpegcanvas.min.js"></script>
+    <script src="assets/libraries/minified/ros3d.min.js"></script>
+    <script src="assets/libraries/minified/easeljs.min.js"></script>
+    <script src="assets/libraries/minified/ros2d.min.js"></script>
+    <script src="assets/libraries/minified/nav2d.min.js"></script>
+    <!-- Minified - UI and DOM -->
+    <script src="node_modules/nipplejs/dist/nipplejs.js"></script>
+    <script src="node_modules/chart.js/dist/chart.min.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- OSM Map -->
+    <script type="text/javascript" src="node_modules/leaflet/dist/leaflet.js"></script>
+    <!-- Non minified - Project code -->
+    <script src="index.js"></script>
+    <script src="gamepad.js"></script>
+</body>
+
+</html>
