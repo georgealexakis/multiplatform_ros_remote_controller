@@ -146,6 +146,6 @@ functionality.
 
 ![5](screen-captures/controller/20.png)
 
-# Contributios
+# Contributions
 
 For any contibutions please contact me.
