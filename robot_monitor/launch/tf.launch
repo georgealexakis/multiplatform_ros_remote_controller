@@ -1,0 +1,11 @@
+<launch>
+  <!-- Essential TFs for d415, t265 and eddie model -->
+  <!-- Map -> t265 odom -->
+  <node pkg="tf" type="static_transform_publisher" name="map_to_t265_odom_frame" args="0.2 0 0.55 0 0 0 map t265_odom_frame 100" />
+  <!-- t265 pose-> base link -->
+  <node pkg="tf" type="static_transform_publisher" name="t265_pose_frame_to_base_link" args="-0.2 0 -0.55 0 0 0 t265_pose_frame base_link 100" />
+  <!-- base link -> t265, d415, laser scanner -->
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_t265_link" args="0.2 0 0.55 0 0 0 base_link t265_link 100" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_t415_link" args="0.2 0 0.55 0 0 0 base_link d415_link 100" />
+  <node pkg="tf" type="static_transform_publisher" name="t265_link_to_laser_scanner" args="0 0 0 0 0 0 t265_link camera_depth_frame 100" />
+</launch>

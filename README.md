@@ -1,4 +1,4 @@
-# multiplatform_ros_remote_controller
+# Multiplatform ROS remote controller
 
 This repo contain remote contollers for multiple robots. Both have extensively tested with ROS1 and multiple robots:
 
@@ -40,7 +40,7 @@ The frameworks and the libraries that have been used for the development are pre
 * Chart.js: Library for the statistics chart. 
 * jquery.js: Necessary library for miscellaneous functionalities.
 
-## Installation for Robot Monitor Package
+## Installation for Robot Monitor Package (optional)
 
 For the installation process the user have to copy the package of robot_monitor in the assets folder of 
 the controller into the catkin/src folder and then to build the project by using the command 
@@ -65,25 +65,30 @@ $ catkin_make
 ```
 
 Python Libraries: 
+```
 * $ sudo apt-get install python-pip 
 * $ pip install psutil 
 * $ pip install paho-mqtt 
+```
 
-ROS Packages: 
+ROS Packages:
+```
 * $ sudo apt-get install ros-melodic-tf2-ros 
 * $ sudo apt-get install ros-melodic-map-server 
 * $ sudo apt-get install ros-melodic-usb-cam 
 * $ sudo apt-get install ros-melodic-web-video-server 
 * $ sudo apt-get install ros-melodic-rosbridge-server 
 * $ sudo apt-get install ros-melodic-joint-state-publisher 
+```
 
 ## Start Up 
 
 Firstly the user has to run the command below. This launch files runs the necessary packages for the 
 right connection, such as the rosbridge package, the web_video_server package and others. The user 
 has the option to publish and subscribe to multiple topics which are essential for the controller 
-operation. 
-* $ roslaunch robot_controller controller.launch
+operation.
+
+` $ roslaunch robot_controller controller.launch`
 
 In the right is presenting the terminal after the execution of the command above and in the left is 
 presenting the joint state publisher that is able to move the 3D model joints. This joint represents the 
@@ -104,7 +109,7 @@ functionality.
 
 ## Screen Captures
 
-## Screenshots
+## Screen captures
 
 ![1](screen-captures/controller/1.png)
 
@@ -148,4 +153,4 @@ functionality.
 
 # Contributions
 
-For any contibutions please contact me.
+For any contributions, please contact me.

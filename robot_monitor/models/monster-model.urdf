@@ -1,0 +1,135 @@
+<?xml version='1.0'?>
+<robot name="monsterrobot">
+
+  <!-- Color Definitions -->
+  <material name="gray">
+    <color rgba="0.1 0.1 0.2 1" />
+  </material>
+  <material name="red">
+    <color rgba="1.0 0.0 0.0 1" />
+  </material>
+  <material name="black">
+    <color rgba="0 0 0 1" />
+  </material>
+
+  <!-- Base link - Robot Chassis -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="1.2 0.8 0.3" />
+      </geometry>
+      <material name="gray" />
+    </visual>
+  </link>
+
+  <!-- Base Link Sprayer Link -->
+  <link name="sprayer_stand_link">
+    <visual>
+      <origin xyz="0 0 0.4" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.05" />
+      </geometry>
+      <material name="red" />
+    </visual>
+  </link>
+
+  <joint name="ssl_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="sprayer_stand_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" rpy="0 0 0" />
+  </joint>
+
+  <!-- Sprayer Link -->
+  <link name="sprayer_link">
+    <visual>
+      <origin xyz="0.1 0 0" rpy="0 1.570795 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.08" />
+      </geometry>
+      <material name="red" />
+    </visual>
+  </link>
+
+  <joint name="sl_joint" type="revolute">
+    <parent link="sprayer_stand_link" />
+    <child link="sprayer_link" />
+    <origin xyz="0 0 0.7" rpy="0 0 0" />
+    <axis xyz="0 1 0" rpy="0 0 0" />
+    <limit lower="-0.6" upper="0.6" effort="3" velocity="1" />
+  </joint>
+
+  <!-- Front Right Wheel -->
+  <link name="f_r_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.570795 0 0" />
+      <geometry>
+        <cylinder length="0.1" radius="0.15" />
+      </geometry>
+      <material name="black" />
+    </visual>
+  </link>
+
+  <joint name="f_r_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="f_r_wheel" />
+    <origin xyz="0.55 -0.45 -0.10" rpy="0 0 0" />
+    <axis xyz="0 1 0" rpy="0 0 0" />
+  </joint>
+
+  <!-- Front Left Wheel -->
+  <link name="f_l_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.570795 0 0" />
+      <geometry>
+        <cylinder length="0.1" radius="0.15" />
+      </geometry>
+      <material name="black" />
+    </visual>
+  </link>
+
+  <joint name="f_l_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="f_l_wheel" />
+    <origin xyz="0.55 0.45 -0.10" rpy="0 0 0" />
+    <axis xyz="0 1 0" rpy="0 0 0" />
+  </joint>
+
+  <!-- Back Right Wheel -->
+  <link name="b_r_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.570795 0 0" />
+      <geometry>
+        <cylinder length="0.1" radius="0.15" />
+      </geometry>
+      <material name="black" />
+    </visual>
+  </link>
+
+  <joint name="b_r_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="b_r_wheel" />
+    <origin xyz="-0.55 -0.45 -0.10" rpy="0 0 0" />
+    <axis xyz="0 1 0" rpy="0 0 0" />
+  </joint>
+
+  <!-- Back Left Wheel -->
+  <link name="b_l_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.570795 0 0" />
+      <geometry>
+        <cylinder length="0.1" radius="0.15" />
+      </geometry>
+      <material name="black" />
+    </visual>
+  </link>
+
+  <joint name="b_l_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="b_l_wheel" />
+    <origin xyz="-0.55 0.45 -0.10" rpy="0 0 0" />
+    <axis xyz="0 1 0" rpy="0 0 0" />
+  </joint>
+
+</robot>

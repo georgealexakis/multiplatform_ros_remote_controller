@@ -1,0 +1,14 @@
+<launch>
+    <!--- Depth image to laser scan -->
+    <include file="$(find robot_monitor)/launch/laserscan.launch" />
+    <!-- Mapping node -->
+    <node pkg="gmapping" type="slam_gmapping" name="gmapping_node" output="screen">
+        <param name="minimumScore" value="1000" />
+        <param name="map_update_interval" value="1" />
+        <param name="xmin" value="10" />
+        <param name="ymin" value="10" />
+        <param name="xmax" value="10" />
+        <param name="ymax" value="10" />
+        <remap from="odom" to="/t265/odom/sample" />
+    </node>
+</launch>

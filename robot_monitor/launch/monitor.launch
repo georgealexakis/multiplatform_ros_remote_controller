@@ -1,0 +1,10 @@
+<launch>
+  <!-- Launch files for essential information of monitor -->
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+  <node name="web_video_server" pkg="web_video_server" type="web_video_server" />
+  <include file="$(find robot_monitor)/launch/display.launch">
+    <arg name="model" value="$(find robot_monitor)/models/eddie-model.urdf" />
+  </include>
+  <node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" />
+  <node name="robot_monitor" pkg="robot_monitor" type="robot_monitor.py" />
+</launch>
