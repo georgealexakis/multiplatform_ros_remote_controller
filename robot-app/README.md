@@ -39,7 +39,6 @@ Run to build: $ cordova build android
 
 * Press map icon to display Open Street Map if you use GPS data topics.
 ![5](../screen-captures/mobile/5.png)
-
 ![6](../screen-captures/mobile/6.png)
 
 
@@ -52,7 +51,6 @@ Run to build: $ cordova build android
 
 
 * URDF viewer.
-
 ![9](../screen-captures/mobile/9.png)
 
 

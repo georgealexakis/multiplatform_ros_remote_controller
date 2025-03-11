@@ -46,60 +46,20 @@ node build_installer.js
 ## Screen Captures
 
 * Main screen of Robot Controller:
-
 ![Robot Controller 1](../screen-captures/controller/1.png)
-
 ![Robot Controller 2](../screen-captures/controller/20.png)
-
 ![Robot Controller 3](../screen-captures/controller/21.png)
-
 ![Robot Controller 4](../screen-captures/controller/22.png)
+![Robot Controller 5](../screen-captures/controller/31.png)
+![Robot Controller 6](../screen-captures/controller/32.png)
+![Robot Controller 7](../screen-captures/controller/33.png)
 
-![Robot Controller 6](../screen-captures/controller/31.png)
-
-![Robot Controller 7](../screen-captures/controller/32.png)
-
-![Robot Controller 8](../screen-captures/controller/33.png)
-
-<p align="center">
-  <img src="../screen-captures/controller/2.png">
-  <img src="../screen-captures/controller/3.png">
-</p>
-
-<p align="center">
-  <img src="../screen-captures/controller/14.png">
-  <img src="../screen-captures/controller/19.png">
-</p>
-
-![4](../screen-captures/controller/4.png)
-
-![5](../screen-captures/controller/5.png)
-
-![6](../screen-captures/controller/6.png)
-
-![7](../screen-captures/controller/7.png)
-
-![8](../screen-captures/controller/8.png)
-
-![9](../screen-captures/controller/9.png)
-
-<p align="center">
-  <img src="../screen-captures/controller/23.png">
-  <img src="../screen-captures/controller/10.png">
-</p>
-
-![11](../screen-captures/controller/11.png)
-
-![12](../screen-captures/controller/12.png)
-
-![13](../screen-captures/controller/13.png)
-
-![15](../screen-captures/controller/15.png)
-
-![16](../screen-captures/controller/16.png)
-
-![17](../screen-captures/controller/17.png)
-
-![18](../screen-captures/controller/18.png)
-
-![34](../screen-captures/controller/34.jpg)
+* More screens of Robot Controller:
+![Robot Controller 8](../screen-captures/controller/5.png)
+![Robot Controller 9](../screen-captures/controller/6.png)
+![Robot Controller 10](../screen-captures/controller/7.png)
+![Robot Controller 11](../screen-captures/controller/9.png)
+![Robot Controller 12](../screen-captures/controller/15.png)
+![Robot Controller 13](../screen-captures/controller/16.png)
+![Robot Controller 14](../screen-captures/controller/17.png)
+![Robot Controller 15](../screen-captures/controller/34.jpg)
