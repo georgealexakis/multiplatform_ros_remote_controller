@@ -110,9 +110,9 @@ functionality.
 ## Screen Captures
 
 <p align="center">
-  <img width="460" height="300" src="screen-captures/controller/1.png">
+  <img src="screen-captures/controller/1.png">
 
-  <img width="460" height="300" src="screen-captures/controller/2.png">
+  <img rc="screen-captures/controller/2.png">
 </p>
 
 
