@@ -1,6 +1,6 @@
-# Robot Contoller
+# Robot Controller
 
-Robot contoller has developed is  the context of multiple research projects for autonomous robots. During experiments, Robot Contoller is a very useful tool. I add something when it is requierred by a new research project.
+Robot Controller is a versatile tool developed as part of multiple research projects focused on autonomous robotics. It serves as a crucial component during experiments, enabling efficient control and adaptation of robotic systems. Features and functionalities are continuously expanded based on the evolving requirements of new research projects.
 
 ## Features
 
@@ -32,7 +32,40 @@ npm install (Inside build folder)
 
 ## Add to .msi installer package
 
-Just if you want to have it as .msi installable packake use electron-wix-msi:
+Just if you want to have it as .msi installable package use electron-wix-msi:
 
 npm install electron-wix-msi --save-dev
 node build_installer.js
+
+## Screen Captures
+
+Main screen of Robot Controller:
+
+![Robot Controller 1](../screen-captures/controller/1.png)
+
+![Robot Controller 2](../screen-captures/controller/20.png)
+
+![Robot Controller 3](../screen-captures/controller/21.png)
+
+![Robot Controller 4](../screen-captures/controller/22.png)
+
+![Robot Controller 5](../screen-captures/controller/23.png)
+
+![Robot Controller 6](../screen-captures/controller/31.png)
+
+![Robot Controller 7](../screen-captures/controller/32.png)
+
+![Robot Controller 8](../screen-captures/controller/33.png)
+
+Toggle buttons which activate actions (on the left), controller options (on the right):
+
+<p align="center">
+  <img src="../screen-captures/controller/2.png">
+  <img src="../screen-captures/controller/3.png">
+</p>
+
+![4](../screen-captures/controller/4.png)
+
+![5](../screen-captures/controller/5.png)
+
+![6](../screen-captures/controller/6.png)
