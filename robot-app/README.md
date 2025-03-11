@@ -14,12 +14,24 @@ Robot App was developed as part of multiple research projects on autonomous robo
 * Robot status and battery.
 * Robot PC status (CPU, RAM, etc.)
 
+## Installation
+
+Run:
+
+```
+npm install
+cd www/
+npm install
+```
+
+then run www/index.html to your browser.
+Follow cordova instructions to run this project with cordova.
+
 ## Build Robot Controller for android devices
 
-Run to build: $ cordova build android
+Run to build: `$ cordova build android`
 
 ## Screen Captures
-
 
 * Main screen of the application during startup
 ![1](../screen-captures/mobile/1.png)

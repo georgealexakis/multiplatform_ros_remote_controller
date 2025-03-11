@@ -15,6 +15,17 @@ Robot Controller is a versatile tool developed as part of multiple research proj
 * Robot status and battery.
 * Robot PC status (CPU, RAM, etc.)
 
+## Installation
+
+Run:
+
+```
+npm install
+```
+
+then run index.html to your browser.
+Follow electron instruction to run this project with electron.
+
 ## Export to executable
 
 ### Export with electron-packager (recommended)

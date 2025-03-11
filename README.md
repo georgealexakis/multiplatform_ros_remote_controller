@@ -43,7 +43,7 @@ For the installation process the user have to copy the package of robot_monitor 
 
 The package is a very simple python node that is sending the diagnostics to the Robot Controller and contains some demo models for demonstration purposes. The controller files have to be pasted into the device that the controller is going to run. When the steps above have completed the user is ready to run the controller.
 
-### Necessary Packages and Libraries
+### Necessary ROS Packages and Libraries
 
 For the successfully connection between ROS and the Controller it is necessary to be installed some ROS packages. Moreover it is necessary to be installed some Python libraries for data transmission and for computer statistics. Below are presenting the packages and the libraries with the necessary command for the installation.
 
