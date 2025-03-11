@@ -88,7 +88,7 @@ right connection, such as the rosbridge package, the web_video_server package an
 has the option to publish and subscribe to multiple topics which are essential for the controller 
 operation.
 
-` $ roslaunch robot_controller controller.launch`
+`$ roslaunch robot_controller controller.launch`
 
 In the right is presenting the terminal after the execution of the command above and in the left is 
 presenting the joint state publisher that is able to move the 3D model joints. This joint represents the 
@@ -109,9 +109,13 @@ functionality.
 
 ## Screen Captures
 
-## Screen captures
+<p align="center">
+  <img width="460" height="300" src="screen-captures/controller/1.png">
 
-![1](screen-captures/controller/1.png)
+  <img width="460" height="300" src="screen-captures/controller/2.png">
+</p>
+
+
 
 ![2](screen-captures/controller/2.png)
 
