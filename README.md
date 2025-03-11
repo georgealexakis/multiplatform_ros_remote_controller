@@ -7,7 +7,11 @@ This repository contains remote controllers for multiple robots, extensively tes
 * SOUP robot (tomato harvester)
 * Custom made robots for agriculture
 
-ROS 2 never tested.
+# ROS Platforms
+
+* ROS 2 never tested.
+* Tested on ROS Melodic.
+* Tested on ROS Noetic.
 
 ## Controllers
 
@@ -53,9 +57,8 @@ $ git clone https://github.com/RobotWebTools/tf2_web_republisher/tree/master
 $ catkin_make
 ```
 
-Python Libraries: 
+Python library: 
 ```
-$ sudo apt-get install python-pip 
 $ pip install psutil
 ```
 
@@ -81,8 +84,8 @@ operation.
 The user can run the Web Robot Controller/Web Robot Application by running the index.html file as a simple webpage with the browser. The Robot Controller/App has been tested only with Google Chrome but it can run with the other browsers with any problem.
 
 The steps that the user has to follow for the right connection are:
-* Connect with the server.
-* Connect the topics.
+* Connect to the rosbridge-server.
+* Connect to the desired topics.
 * Press close to navigate to the main screen.
 
 You can find more instruction to the README of each controller.
