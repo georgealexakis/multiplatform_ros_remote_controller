@@ -19,27 +19,33 @@ Robot Controller is a versatile tool developed as part of multiple research proj
 
 ### Export with electron-packager (recommended)
 
+```
 npm install electron-packager -g
 electron-packager . --platform=win32 --arch=x64 robot-controller
 npm install (Inside build folder)
+```
 
 ## Export with electron-forge
 
+```
 npm install --save-dev @electron-forge/cli
 npx electron-forge import
 npm run make
 npm install (Inside build folder)
+```
 
 ## Add to .msi installer package
 
 Just if you want to have it as .msi installable package use electron-wix-msi:
 
+```
 npm install electron-wix-msi --save-dev
 node build_installer.js
+```
 
 ## Screen Captures
 
-Main screen of Robot Controller:
+* Main screen of Robot Controller:
 
 ![Robot Controller 1](../screen-captures/controller/1.png)
 
@@ -54,8 +60,6 @@ Main screen of Robot Controller:
 ![Robot Controller 7](../screen-captures/controller/32.png)
 
 ![Robot Controller 8](../screen-captures/controller/33.png)
-
-Toggle buttons which activate actions (on the left), controller options (on the right):
 
 <p align="center">
   <img src="../screen-captures/controller/2.png">
