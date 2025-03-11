@@ -109,8 +109,10 @@ functionality.
 
 ## Screen Captures
 
+![2](screen-captures/controller/1.png)
+
 <p align="center">
-  <img src="screen-captures/controller/1.png">
+  <img src="screen-captures/controller/2.png">
 
   <img src="screen-captures/controller/2.png">
 </p>
