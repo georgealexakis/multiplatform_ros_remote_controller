@@ -49,8 +49,6 @@ Main screen of Robot Controller:
 
 ![Robot Controller 4](../screen-captures/controller/22.png)
 
-![Robot Controller 5](../screen-captures/controller/23.png)
-
 ![Robot Controller 6](../screen-captures/controller/31.png)
 
 ![Robot Controller 7](../screen-captures/controller/32.png)
@@ -76,7 +74,10 @@ Toggle buttons which activate actions (on the left), controller options (on the 
 
 ![9](../screen-captures/controller/9.png)
 
-![10](../screen-captures/controller/10.png)
+<p align="center">
+  <img src="../screen-captures/controller/23.png">
+  <img src="../screen-captures/controller/10.png">
+</p>
 
 ![11](../screen-captures/controller/11.png)
 
@@ -96,4 +97,4 @@ Toggle buttons which activate actions (on the left), controller options (on the 
 
 ![19](../screen-captures/controller/19.png)
 
-![34](../screen-captures/controller/34.png)
+![34](../screen-captures/controller/34.jpg)
