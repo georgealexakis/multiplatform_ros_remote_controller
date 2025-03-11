@@ -67,9 +67,6 @@ node build_installer.js
 
 * More screens of Robot Controller:
 ![Robot Controller 8](../screen-captures/controller/5.png)
-![Robot Controller 9](../screen-captures/controller/6.png)
-![Robot Controller 10](../screen-captures/controller/7.png)
-![Robot Controller 11](../screen-captures/controller/9.png)
 ![Robot Controller 12](../screen-captures/controller/15.png)
 ![Robot Controller 13](../screen-captures/controller/16.png)
 ![Robot Controller 14](../screen-captures/controller/17.png)
