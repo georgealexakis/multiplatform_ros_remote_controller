@@ -47,9 +47,7 @@ The package is a very simple python node that is sending the diagnostics to the 
 
 For the successfully connection between ROS and the Controller it is necessary to be installed some ROS packages. Moreover it is necessary to be installed some Python libraries for data transmission and for computer statistics. Below are presenting the packages and the libraries with the necessary command for the installation.
 
-Single ROS package: 
-
-* Copy package robot_monitor to catkin_ws/src and: 
+Copy package robot_monitor to catkin_ws/src and: 
 ```
 $ git clone https://github.com/RobotWebTools/tf2_web_republisher/tree/master
 $ catkin_make
@@ -57,18 +55,18 @@ $ catkin_make
 
 Python Libraries: 
 ```
-* $ sudo apt-get install python-pip 
-* $ pip install psutil
+$ sudo apt-get install python-pip 
+$ pip install psutil
 ```
 
 ROS Packages:
 ```
-* $ sudo apt-get install ros-<ROS-VERSION>-tf2-ros 
-* $ sudo apt-get install ros-<ROS-VERSION>-map-server 
-* $ sudo apt-get install ros-<ROS-VERSION>-usb-cam 
-* $ sudo apt-get install ros-<ROS-VERSION>-web-video-server 
-* $ sudo apt-get install ros-<ROS-VERSION>-rosbridge-server 
-* $ sudo apt-get install ros-<ROS-VERSION>-joint-state-publisher 
+$ sudo apt-get install ros-<ROS-VERSION>-tf2-ros 
+$ sudo apt-get install ros-<ROS-VERSION>-map-server 
+$ sudo apt-get install ros-<ROS-VERSION>-usb-cam 
+$ sudo apt-get install ros-<ROS-VERSION>-web-video-server 
+$ sudo apt-get install ros-<ROS-VERSION>-rosbridge-server 
+$ sudo apt-get install ros-<ROS-VERSION>-joint-state-publisher 
 ```
 
 ## Start Up 
