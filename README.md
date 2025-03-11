@@ -13,6 +13,11 @@ This repository contains remote controllers for multiple robots, extensively tes
 * Tested on ROS Melodic.
 * Tested on ROS Noetic.
 
+## Builds
+
+* [robot-controller.msi](https://github.com/georgealexakis/multiplatform_ros_remote_controller/tree/main/build/robot-controller.msi): for Windows devices is in build folder.
+* [app-debug.apk](https://github.com/georgealexakis/multiplatform_ros_remote_controller/tree/main/build/app-debug.apk): for Android devices is in build folder.
+
 ## Controllers
 
 * [robot-app](https://github.com/georgealexakis/multiplatform_ros_remote_controller/tree/main/robot-app): The robot-app package is the main robot controller that has build for mobile devices. Just clone it and run `npm install` to download the packages.
