@@ -62,6 +62,11 @@ Toggle buttons which activate actions (on the left), controller options (on the 
   <img src="../screen-captures/controller/3.png">
 </p>
 
+<p align="center">
+  <img src="../screen-captures/controller/14.png">
+  <img src="../screen-captures/controller/19.png">
+</p>
+
 ![4](../screen-captures/controller/4.png)
 
 ![5](../screen-captures/controller/5.png)
@@ -85,8 +90,6 @@ Toggle buttons which activate actions (on the left), controller options (on the 
 
 ![13](../screen-captures/controller/13.png)
 
-![14](../screen-captures/controller/14.png)
-
 ![15](../screen-captures/controller/15.png)
 
 ![16](../screen-captures/controller/16.png)
@@ -94,7 +97,5 @@ Toggle buttons which activate actions (on the left), controller options (on the 
 ![17](../screen-captures/controller/17.png)
 
 ![18](../screen-captures/controller/18.png)
-
-![19](../screen-captures/controller/19.png)
 
 ![34](../screen-captures/controller/34.jpg)
