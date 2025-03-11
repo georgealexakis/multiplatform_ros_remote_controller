@@ -112,7 +112,7 @@ functionality.
 <p align="center">
   <img src="screen-captures/controller/1.png">
 
-  <img rc="screen-captures/controller/2.png">
+  <img src="screen-captures/controller/2.png">
 </p>
 
 
