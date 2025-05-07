@@ -7,6 +7,11 @@ This repository contains remote controllers for multiple robots, extensively tes
 * SOUP robot (tomato harvester)
 * Custom made robots for agriculture
 
+## Demos
+
+* [robot-controller](https://georgealexakis.github.io/multiplatform_ros_remote_controller/desktop/)
+* [robot-app](https://georgealexakis.github.io/multiplatform_ros_remote_controller/mobile/)
+
 ## ROS Platforms
 
 * ROS 2 never tested.
